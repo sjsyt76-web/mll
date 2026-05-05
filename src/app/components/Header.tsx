@@ -11,7 +11,7 @@ export function Header() {
       initial={{ y: -40, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 2.4 }}
-      className="sticky top-0 z-40"
+      className="fixed top-0 left-0 right-0 z-40"
     >
       <div className="mx-4 md:mx-8 mt-3">
         <div
@@ -39,12 +39,12 @@ export function Header() {
               ))}
             </nav>
 
+            {/* Logo — monogram D&A */}
             <a
               href="#"
-              className="font-serif text-white tracking-[0.2em] uppercase absolute left-1/2 -translate-x-1/2"
-              style={{ fontSize: "20px" }}
+              className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3"
             >
-              Dee<span className="italic text-[#FF5733]">&</span>Abllo
+              <HeaderLogo />
             </a>
 
             <div className="flex items-center gap-5 text-white/60 ml-6">
@@ -70,6 +70,7 @@ export function Header() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden mx-4 mt-2 glass-strong px-6 py-5 flex flex-col gap-4"
+          style={{ borderRadius: 20 }}
         >
           {links.map((l) => (
             <a
@@ -85,5 +86,40 @@ export function Header() {
         </motion.nav>
       )}
     </motion.header>
+  );
+}
+
+function HeaderLogo() {
+  return (
+    <svg
+      width="44"
+      height="44"
+      viewBox="0 0 44 44"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient id="hLogoRing" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="rgba(255,87,51,0.5)" />
+          <stop offset="100%" stopColor="rgba(255,87,51,0.15)" />
+        </linearGradient>
+      </defs>
+      {/* Outer ring */}
+      <circle cx="22" cy="22" r="20" fill="none" stroke="url(#hLogoRing)" strokeWidth="1.2" />
+      {/* Inner ring */}
+      <circle cx="22" cy="22" r="16" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="0.5" />
+      {/* D */}
+      <text x="15" y="21" textAnchor="middle" fill="white" fontFamily="'Cormorant Garamond', serif" fontSize="11" fontWeight="500" letterSpacing="1">
+        D
+      </text>
+      {/* & */}
+      <text x="22" y="27" textAnchor="middle" fill="#FF5733" fontFamily="'Cormorant Garamond', serif" fontSize="8" fontStyle="italic">
+        &amp;
+      </text>
+      {/* A */}
+      <text x="29" y="31" textAnchor="middle" fill="white" fontFamily="'Cormorant Garamond', serif" fontSize="11" fontWeight="500" letterSpacing="1">
+        A
+      </text>
+    </svg>
   );
 }

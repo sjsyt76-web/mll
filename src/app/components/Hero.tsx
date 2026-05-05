@@ -1,248 +1,226 @@
-import { motion } from "motion/react";
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const D = 2.6;
 
+const slides = [
+  {
+    bg: "https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=1920&q=90",
+    title: "Тёмная\nэлегантность",
+    desc: "Obsidian Elixir — аромат обсидиана и пламени. Глубокий амбровый аккорд с ладаном, созданный для тех, кто правит в тишине.",
+    cta: "Смотреть каталог",
+    href: "#catalog",
+  },
+  {
+    bg: "https://images.unsplash.com/photo-1594035910387-fea081ae7aec?w=1920&q=90",
+    title: "Сила\nхарактера",
+    desc: "Каждая композиция собирается вручную в нашем ателье в Алматы. Малые партии, никакого массового производства — только чистое мастерство.",
+    cta: "О бренде",
+    href: "#about",
+  },
+  {
+    bg: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=1920&q=90",
+    title: "Найди свой\nаромат",
+    desc: "32 уникальных аромата — от дымных восточных до свежих цитрусовых. Стойкость до 12 часов. Бесплатная консультация и подбор.",
+    cta: "Открыть каталог",
+    href: "#catalog",
+  },
+];
+
 export function Hero() {
+  const [idx, setIdx] = useState(0);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), D * 1000);
+    return () => clearTimeout(t);
+  }, []);
+
+  const next = useCallback(() => setIdx((i) => (i + 1) % slides.length), []);
+  const prev = useCallback(
+    () => setIdx((i) => (i - 1 + slides.length) % slides.length),
+    []
+  );
+
+  useEffect(() => {
+    if (!ready) return;
+    const t = setInterval(next, 6000);
+    return () => clearInterval(t);
+  }, [ready, next]);
+
+  const s = slides[idx];
+
   return (
-    <section className="relative bg-black overflow-hidden min-h-screen flex items-center justify-center">
-      {/* Ambient radial glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(ellipse 60% 50% at 50% 55%, rgba(255,87,51,0.06), transparent 70%)",
-        }}
-      />
-
-      {/* Subtle horizontal lines */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.015]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(255,255,255,0.5) 60px, rgba(255,255,255,0.5) 61px)",
-        }}
-      />
-
-      {/* Animated slow wave */}
-      <motion.div
-        animate={{ x: [-30, 30, -30] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-0 left-[-10%] right-[-10%] h-[35%] pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(ellipse 100% 80% at 50% 100%, rgba(255,87,51,0.05), transparent)",
-        }}
-      />
-
-      <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
-        {/* Logo */}
+    <section className="relative bg-black overflow-hidden h-screen">
+      {/* Background slides */}
+      <AnimatePresence mode="wait">
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
+          key={idx}
+          initial={{ opacity: 0, scale: 1.08 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.4, delay: D, ease: [0.22, 1, 0.36, 1] }}
-          className="flex justify-center mb-10"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0"
         >
-          <BrandLogo />
+          <img
+            src={s.bg}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          {/* Dark overlay */}
+          <div className="absolute inset-0 bg-black/55" />
+          {/* Orange bottom gradient */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.7) 70%, rgba(0,0,0,0.95) 100%)",
+            }}
+          />
+          {/* Subtle orange atmosphere */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage:
+                "radial-gradient(ellipse 50% 50% at 20% 80%, rgba(255,87,51,0.08), transparent)",
+            }}
+          />
         </motion.div>
+      </AnimatePresence>
 
-        {/* Divider */}
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 1, delay: D + 0.5, ease: "easeInOut" }}
-          className="h-[1px] w-28 mx-auto mb-10 origin-center"
-          style={{
-            background: "linear-gradient(90deg, transparent, #FF5733, transparent)",
-          }}
-        />
-
-        {/* Tagline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: D + 0.7 }}
-          className="font-serif text-white leading-[1.1] mb-6"
-          style={{
-            fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
-            fontWeight: 400,
-          }}
-        >
-          Ароматы, которые{" "}
-          <span className="italic text-[#FF5733]/80">говорят за вас</span>
-        </motion.h1>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: D + 1 }}
-          className="text-white/40 font-sans leading-relaxed mb-6 max-w-xl mx-auto"
-          style={{ fontSize: "15px" }}
-        >
-          Dee&Abllo — независимый парфюмерный дом из Алматы. Мы создаём
-          исключительно мужскую парфюмерию: каждая композиция собирается
-          вручную, малыми партиями, без массового производства.
-        </motion.p>
-
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: D + 1.2 }}
-          className="text-white/30 font-sans leading-relaxed mb-12 max-w-md mx-auto"
-          style={{ fontSize: "13px" }}
-        >
-          Чистые ноты. Выверенные пропорции. Стойкость до 12 часов.
-          Минимум флакона — максимум характера.
-        </motion.p>
-
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: D + 1.4 }}
-          className="flex justify-center gap-12 md:gap-16 mb-14"
-        >
-          {[
-            ["32", "аромата"],
-            ["2021", "основан"],
-            ["12ч", "стойкость"],
-          ].map(([val, label]) => (
-            <div key={label} className="text-center">
-              <div
-                className="font-serif text-[#FF5733]"
-                style={{ fontSize: "28px" }}
-              >
-                {val}
-              </div>
-              <div
-                className="text-white/30 uppercase tracking-[0.2em] font-sans mt-1"
-                style={{ fontSize: "9px" }}
-              >
-                {label}
-              </div>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* CTA button */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: D + 1.6 }}
-        >
-          <a
-            href="#catalog"
-            className="mercury-btn mercury-btn-active inline-block font-sans uppercase tracking-[0.3em] transition-all duration-500"
-            style={{ fontSize: "11px", padding: "14px 40px", borderRadius: 50 }}
+      {/* Content overlay */}
+      <div className="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-16 max-w-7xl mx-auto">
+        {/* Title + Description */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={`content-${idx}`}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 30 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-2xl"
           >
-            Смотреть каталог
-          </a>
-        </motion.div>
+            <h1
+              className="font-serif text-white leading-[1.05] mb-6 whitespace-pre-line"
+              style={{
+                fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+                fontWeight: 400,
+              }}
+            >
+              {s.title.split("\n").map((line, i) => (
+                <span key={i}>
+                  {i === 1 ? (
+                    <span className="italic">{line}</span>
+                  ) : (
+                    line
+                  )}
+                  {i === 0 && <br />}
+                </span>
+              ))}
+            </h1>
 
-        {/* Scroll indicator */}
+            <p
+              className="text-white/50 font-sans leading-relaxed mb-10 max-w-lg"
+              style={{ fontSize: "15px" }}
+            >
+              {s.desc}
+            </p>
+
+            {/* CTA — circular button like selectparfums */}
+            <a
+              href={s.href}
+              className="group inline-flex items-center gap-4"
+            >
+              <div
+                className="w-[120px] h-[120px] md:w-[140px] md:h-[140px] rounded-full border border-white/20 flex items-center justify-center text-white/70 font-sans uppercase tracking-[0.15em] transition-all duration-500 group-hover:border-[#FF5733] group-hover:text-[#FF5733] group-hover:shadow-[0_0_30px_rgba(255,87,51,0.2)]"
+                style={{ fontSize: "11px" }}
+              >
+                {s.cta}
+              </div>
+            </a>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Bottom bar: slide counter + nav arrows */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: D + 2 }}
-          className="mt-20"
+          animate={{ opacity: ready ? 1 : 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="absolute bottom-8 md:bottom-12 right-6 md:right-16 flex items-center gap-5"
         >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="text-white/20 uppercase tracking-[0.5em] font-sans"
-            style={{ fontSize: "9px" }}
-          >
-            ↓
-          </motion.div>
+          {/* Counter */}
+          <div className="flex items-baseline gap-1 font-serif">
+            <span className="text-[#FF5733]" style={{ fontSize: "36px" }}>
+              {String(idx + 1).padStart(2, "0")}
+            </span>
+            <span className="text-white/30" style={{ fontSize: "14px" }}>
+              /{String(slides.length).padStart(2, "0")}
+            </span>
+          </div>
+
+          {/* Arrow buttons */}
+          <div className="flex gap-2">
+            <button
+              onClick={prev}
+              className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:border-[#FF5733] hover:text-[#FF5733] transition-all duration-300"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              onClick={next}
+              className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:border-[#FF5733] hover:text-[#FF5733] transition-all duration-300"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Slide indicators */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: ready ? 1 : 0 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-2"
+        >
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIdx(i)}
+              className="h-[3px] rounded-full transition-all duration-500"
+              style={{
+                width: i === idx ? 32 : 12,
+                background:
+                  i === idx ? "#FF5733" : "rgba(255,255,255,0.2)",
+              }}
+            />
+          ))}
         </motion.div>
       </div>
+
+      {/* Scrolling marquee — promo ticker */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: ready ? 1 : 0 }}
+        transition={{ duration: 0.8, delay: 1 }}
+        className="absolute bottom-0 left-0 right-0 overflow-hidden bg-[#FF5733] py-2.5"
+      >
+        <motion.div
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="flex whitespace-nowrap"
+        >
+          {Array.from({ length: 8 }).map((_, i) => (
+            <span
+              key={i}
+              className="font-sans uppercase tracking-[0.2em] text-white mx-8"
+              style={{ fontSize: "12px" }}
+            >
+              Ручная сборка · Стойкость 12ч · Доставка по КЗ 1–3 дня · Бесплатный подбор аромата
+            </span>
+          ))}
+        </motion.div>
+      </motion.div>
     </section>
-  );
-}
-
-/* ── Brand Logo SVG ── */
-function BrandLogo() {
-  return (
-    <svg
-      width="220"
-      height="220"
-      viewBox="0 0 220 220"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <radialGradient id="logoGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#FF5733" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="#FF5733" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id="wreathGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.3)" />
-          <stop offset="50%" stopColor="rgba(255,87,51,0.35)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0.15)" />
-        </linearGradient>
-      </defs>
-
-      {/* Ambient glow */}
-      <circle cx="110" cy="110" r="100" fill="url(#logoGlow)" />
-
-      {/* Outer ring */}
-      <circle cx="110" cy="110" r="95" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-      <circle cx="110" cy="110" r="83" fill="none" stroke="rgba(255,87,51,0.12)" strokeWidth="0.5" />
-
-      {/* Wreath — left */}
-      <path
-        d="M55,155 Q32,132 38,105 Q42,82 55,65 Q60,58 66,53"
-        fill="none"
-        stroke="url(#wreathGrad)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M60,148 Q42,130 46,107 Q49,88 60,75"
-        fill="none"
-        stroke="rgba(255,255,255,0.12)"
-        strokeWidth="1"
-      />
-      <ellipse cx="44" cy="115" rx="7" ry="2.5" transform="rotate(-30 44 115)" fill="rgba(255,87,51,0.13)" />
-      <ellipse cx="49" cy="93" rx="5.5" ry="2" transform="rotate(-20 49 93)" fill="rgba(255,87,51,0.1)" />
-      <ellipse cx="57" cy="76" rx="5" ry="2" transform="rotate(-10 57 76)" fill="rgba(255,87,51,0.08)" />
-
-      {/* Wreath — right */}
-      <path
-        d="M165,155 Q188,132 182,105 Q178,82 165,65 Q160,58 154,53"
-        fill="none"
-        stroke="url(#wreathGrad)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-      <path
-        d="M160,148 Q178,130 174,107 Q171,88 160,75"
-        fill="none"
-        stroke="rgba(255,255,255,0.12)"
-        strokeWidth="1"
-      />
-      <ellipse cx="176" cy="115" rx="7" ry="2.5" transform="rotate(30 176 115)" fill="rgba(255,87,51,0.13)" />
-      <ellipse cx="171" cy="93" rx="5.5" ry="2" transform="rotate(20 171 93)" fill="rgba(255,87,51,0.1)" />
-      <ellipse cx="163" cy="76" rx="5" ry="2" transform="rotate(10 163 76)" fill="rgba(255,87,51,0.08)" />
-
-      {/* Brand text */}
-      <text x="110" y="100" textAnchor="middle" fill="white" fontFamily="'Cormorant Garamond', serif" fontSize="26" letterSpacing="6" fontWeight="400">
-        DEE
-      </text>
-      <text x="110" y="118" textAnchor="middle" fill="#FF5733" fontFamily="'Cormorant Garamond', serif" fontSize="20" fontStyle="italic">
-        &amp;
-      </text>
-      <text x="110" y="140" textAnchor="middle" fill="white" fontFamily="'Cormorant Garamond', serif" fontSize="26" letterSpacing="6" fontWeight="400">
-        ABLLO
-      </text>
-
-      {/* Tagline */}
-      <text x="110" y="164" textAnchor="middle" fill="rgba(255,255,255,0.25)" fontFamily="'Inter', sans-serif" fontSize="7" letterSpacing="3.5">
-        MAISON DE PARFUM
-      </text>
-
-      {/* Bottom dot */}
-      <circle cx="110" cy="178" r="2" fill="rgba(255,87,51,0.25)" />
-    </svg>
   );
 }
