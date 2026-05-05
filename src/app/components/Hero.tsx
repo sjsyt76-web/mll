@@ -1,32 +1,192 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const D = 2.6;
 
 const slides = [
   {
-    bg: "https://images.unsplash.com/photo-1674318881563-84ba1a53d9c4?w=1920&q=90",
-    title: "Тёмная\nэлегантность",
-    desc: "Obsidian Elixir — аромат обсидиана и пламени. Глубокий амбровый аккорд с ладаном, созданный для тех, кто правит в тишине.",
-    cta: "Смотреть каталог",
-    href: "#catalog",
+    bg: "/images/hero1.jpg",
+    accent: "rgba(255,87,51,0.10)",
+    title: "Тёмная элегантность",
+    subtitle: "коллекция 2025",
+    desc: "Глубокий амбровый аккорд с ладаном и обсидианом. Создан для тех, кто правит в тишине.",
   },
   {
-    bg: "https://images.unsplash.com/photo-1611146264101-358a3b387eee?w=1920&q=90",
-    title: "Сила\nхарактера",
-    desc: "Каждая композиция собирается вручную в нашем ателье в Алматы. Малые партии, никакого массового производства — только чистое мастерство.",
-    cta: "О бренде",
-    href: "#about",
+    bg: "/images/hero2.jpg",
+    accent: "rgba(255,120,50,0.08)",
+    title: "Сила характера",
+    subtitle: "ручная сборка",
+    desc: "Каждая композиция собирается вручную в нашем ателье в Алматы. Малые партии — чистое мастерство.",
   },
   {
-    bg: "https://images.unsplash.com/photo-1732828912683-57104a2d1b4b?w=1920&q=90",
-    title: "Найди свой\nаромат",
-    desc: "32 уникальных аромата — от дымных восточных до свежих цитрусовых. Стойкость до 12 часов. Бесплатная консультация и подбор.",
-    cta: "Открыть каталог",
-    href: "#catalog",
+    bg: "/images/hero3.jpg",
+    accent: "rgba(255,87,51,0.06)",
+    title: "Найди свой аромат",
+    subtitle: "32 аромата",
+    desc: "От дымных восточных до свежих цитрусовых. Стойкость до 12 часов. Бесплатный подбор.",
   },
 ];
+
+/* ── Floating glass particles ── */
+function GlassParticles() {
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 16 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 2 + Math.random() * 4,
+        dur: 12 + Math.random() * 18,
+        delay: Math.random() * 8,
+        opacity: 0.08 + Math.random() * 0.15,
+      })),
+    []
+  );
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${p.x}%`,
+            width: p.size,
+            height: p.size,
+            background: `radial-gradient(circle, rgba(255,87,51,${p.opacity}), transparent)`,
+            boxShadow: `0 0 ${p.size * 2}px rgba(255,87,51,${p.opacity * 0.5})`,
+          }}
+          animate={{
+            y: [p.y * 6, p.y * 6 - 600],
+            opacity: [0, p.opacity, p.opacity, 0],
+          }}
+          transition={{
+            duration: p.dur,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: "linear",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ── Caustic light overlay ── */
+function CausticOverlay() {
+  return (
+    <motion.div
+      className="absolute inset-0 pointer-events-none opacity-[0.03]"
+      animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
+      transition={{ duration: 25, repeat: Infinity, repeatType: "mirror", ease: "linear" }}
+      style={{
+        backgroundImage: `
+          radial-gradient(ellipse 30% 40% at 30% 50%, rgba(255,87,51,0.4), transparent),
+          radial-gradient(ellipse 25% 35% at 70% 30%, rgba(255,140,80,0.3), transparent),
+          radial-gradient(ellipse 35% 25% at 50% 80%, rgba(255,87,51,0.2), transparent)
+        `,
+        backgroundSize: "200% 200%",
+      }}
+    />
+  );
+}
+
+/* ── Animated decorative ring ── */
+function GlowRing() {
+  return (
+    <div className="absolute right-[8%] top-1/2 -translate-y-1/2 hidden lg:block pointer-events-none">
+      <motion.svg
+        width="340"
+        height="340"
+        viewBox="0 0 340 340"
+        initial={{ opacity: 0, rotate: -30 }}
+        animate={{ opacity: 1, rotate: 0 }}
+        transition={{ duration: 2, delay: D + 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <defs>
+          <linearGradient id="ringGrad1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="rgba(255,87,51,0.35)" />
+            <stop offset="50%" stopColor="rgba(255,87,51,0.05)" />
+            <stop offset="100%" stopColor="rgba(255,87,51,0.25)" />
+          </linearGradient>
+          <linearGradient id="ringGrad2" x1="1" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(255,255,255,0.08)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
+          </linearGradient>
+        </defs>
+
+        {/* Outer ring */}
+        <motion.circle
+          cx="170" cy="170" r="160"
+          fill="none"
+          stroke="url(#ringGrad1)"
+          strokeWidth="0.8"
+          strokeDasharray="8 12"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+          style={{ transformOrigin: "170px 170px" }}
+        />
+
+        {/* Middle ring */}
+        <motion.circle
+          cx="170" cy="170" r="130"
+          fill="none"
+          stroke="url(#ringGrad2)"
+          strokeWidth="0.5"
+          animate={{ rotate: -360 }}
+          transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+          style={{ transformOrigin: "170px 170px" }}
+        />
+
+        {/* Inner pulsing glow */}
+        <motion.circle
+          cx="170" cy="170" r="80"
+          fill="none"
+          stroke="rgba(255,87,51,0.12)"
+          strokeWidth="1"
+          animate={{ r: [78, 84, 78], opacity: [0.12, 0.2, 0.12] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Center dot */}
+        <motion.circle
+          cx="170" cy="170" r="3"
+          fill="rgba(255,87,51,0.4)"
+          animate={{ r: [2.5, 4, 2.5], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        {/* Cardinal dots */}
+        {[0, 90, 180, 270].map((angle) => {
+          const rad = (angle * Math.PI) / 180;
+          return (
+            <circle
+              key={angle}
+              cx={170 + 160 * Math.cos(rad)}
+              cy={170 + 160 * Math.sin(rad)}
+              r="2"
+              fill="rgba(255,87,51,0.3)"
+            />
+          );
+        })}
+
+        {/* Brand text around ring */}
+        <text
+          x="170" y="170"
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill="rgba(255,255,255,0.06)"
+          fontFamily="'Cormorant Garamond', serif"
+          fontSize="11"
+          letterSpacing="8"
+        >
+          DEE & ABLLO
+        </text>
+      </motion.svg>
+    </div>
+  );
+}
 
 export function Hero() {
   const [idx, setIdx] = useState(0);
@@ -38,14 +198,10 @@ export function Hero() {
   }, []);
 
   const next = useCallback(() => setIdx((i) => (i + 1) % slides.length), []);
-  const prev = useCallback(
-    () => setIdx((i) => (i - 1 + slides.length) % slides.length),
-    []
-  );
 
   useEffect(() => {
     if (!ready) return;
-    const t = setInterval(next, 6000);
+    const t = setInterval(next, 5000);
     return () => clearInterval(t);
   }, [ready, next]);
 
@@ -53,170 +209,191 @@ export function Hero() {
 
   return (
     <section className="relative bg-black overflow-hidden h-screen">
-      {/* Background slides */}
+      {/* BG image with crossfade */}
       <AnimatePresence mode="wait">
         <motion.div
           key={idx}
-          initial={{ opacity: 0, scale: 1.08 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1.4, ease: "easeInOut" }}
           className="absolute inset-0"
         >
-          <img
-            src={s.bg}
-            alt=""
-            className="w-full h-full object-cover"
-          />
-          {/* Dark overlay */}
-          <div className="absolute inset-0 bg-black/55" />
-          {/* Orange bottom gradient */}
+          <img src={s.bg} alt="" className="w-full h-full object-cover" loading="eager" />
+          <div className="absolute inset-0 bg-black/60" />
           <div
             className="absolute inset-0"
             style={{
-              backgroundImage:
-                "linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.7) 70%, rgba(0,0,0,0.95) 100%)",
-            }}
-          />
-          {/* Subtle orange atmosphere */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage:
-                "radial-gradient(ellipse 50% 50% at 20% 80%, rgba(255,87,51,0.08), transparent)",
+              backgroundImage: `
+                linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 40%, rgba(0,0,0,0.8) 85%, #000 100%),
+                radial-gradient(ellipse 60% 50% at 25% 75%, ${s.accent}, transparent)
+              `,
             }}
           />
         </motion.div>
       </AnimatePresence>
 
-      {/* Content overlay */}
-      <div className="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-16 max-w-7xl mx-auto">
-        {/* Title + Description */}
+      {/* Caustic light */}
+      <CausticOverlay />
+
+      {/* Floating particles */}
+      <GlassParticles />
+
+      {/* Decorative ring */}
+      <GlowRing />
+
+      {/* Content */}
+      <div className="relative z-10 h-full flex flex-col justify-end pb-20 md:pb-28 px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto">
+        {/* Subtitle label */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={`content-${idx}`}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 30 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-2xl"
+            key={`sub-${idx}`}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: ready ? 1 : 0, x: ready ? 0 : -20 }}
+            exit={{ opacity: 0, x: 20 }}
+            transition={{ duration: 0.6 }}
           >
-            <h1
-              className="font-serif text-white leading-[1.05] mb-6 whitespace-pre-line"
-              style={{
-                fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
-                fontWeight: 400,
-              }}
+            <span
+              className="inline-block font-sans uppercase tracking-[0.4em] text-[#FF5733]/70 mb-5 border border-[#FF5733]/20 px-4 py-1.5"
+              style={{ fontSize: "10px", borderRadius: 2 }}
             >
-              {s.title.split("\n").map((line, i) => (
-                <span key={i}>
-                  {i === 1 ? (
-                    <span className="italic">{line}</span>
-                  ) : (
-                    line
-                  )}
-                  {i === 0 && <br />}
-                </span>
-              ))}
-            </h1>
-
-            <p
-              className="text-white/50 font-sans leading-relaxed mb-10 max-w-lg"
-              style={{ fontSize: "15px" }}
-            >
-              {s.desc}
-            </p>
-
-            {/* CTA — circular button like selectparfums */}
-            <a
-              href={s.href}
-              className="group inline-flex items-center gap-4"
-            >
-              <div
-                className="w-[120px] h-[120px] md:w-[140px] md:h-[140px] rounded-full border border-white/20 flex items-center justify-center text-white/70 font-sans uppercase tracking-[0.15em] transition-all duration-500 group-hover:border-[#FF5733] group-hover:text-[#FF5733] group-hover:shadow-[0_0_30px_rgba(255,87,51,0.2)]"
-                style={{ fontSize: "11px" }}
-              >
-                {s.cta}
-              </div>
-            </a>
+              {s.subtitle}
+            </span>
           </motion.div>
         </AnimatePresence>
 
-        {/* Bottom bar: slide counter + nav arrows */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: ready ? 1 : 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="absolute bottom-8 md:bottom-12 right-6 md:right-16 flex items-center gap-5"
-        >
-          {/* Counter */}
-          <div className="flex items-baseline gap-1 font-serif">
-            <span className="text-[#FF5733]" style={{ fontSize: "36px" }}>
-              {String(idx + 1).padStart(2, "0")}
-            </span>
-            <span className="text-white/30" style={{ fontSize: "14px" }}>
-              /{String(slides.length).padStart(2, "0")}
-            </span>
-          </div>
+        {/* Title */}
+        <AnimatePresence mode="wait">
+          <motion.h1
+            key={`title-${idx}`}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 40 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="font-serif text-white leading-[1.0] mb-6 max-w-xl"
+            style={{
+              fontSize: "clamp(2.8rem, 6.5vw, 5rem)",
+              fontWeight: 400,
+            }}
+          >
+            {s.title}
+          </motion.h1>
+        </AnimatePresence>
 
-          {/* Arrow buttons */}
-          <div className="flex gap-2">
-            <button
-              onClick={prev}
-              className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:border-[#FF5733] hover:text-[#FF5733] transition-all duration-300"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={next}
-              className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:border-[#FF5733] hover:text-[#FF5733] transition-all duration-300"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Slide indicators */}
+        {/* Accent line */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: ready ? 1 : 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-2"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: ready ? 1 : 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="h-[2px] w-16 mb-6 origin-left"
+          style={{ background: "#FF5733" }}
+        />
+
+        {/* Description */}
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={`desc-${idx}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: ready ? 0.45 : 0, y: ready ? 0 : 20 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-white font-sans leading-relaxed mb-10 max-w-md"
+            style={{ fontSize: "14px" }}
+          >
+            {s.desc}
+          </motion.p>
+        </AnimatePresence>
+
+        {/* CTA + slide counter row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 20 }}
+          transition={{ duration: 0.7, delay: 0.3 }}
+          className="flex items-center gap-8"
         >
-          {slides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIdx(i)}
-              className="h-[3px] rounded-full transition-all duration-500"
-              style={{
-                width: i === idx ? 32 : 12,
-                background:
-                  i === idx ? "#FF5733" : "rgba(255,255,255,0.2)",
-              }}
-            />
-          ))}
+          {/* CTA button — mercury style */}
+          <a
+            href="#catalog"
+            className="group flex items-center gap-3 mercury-btn mercury-btn-active font-sans uppercase tracking-[0.25em] transition-all duration-500"
+            style={{ fontSize: "11px", padding: "14px 32px", borderRadius: 50 }}
+          >
+            Смотреть каталог
+            <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
+
+          {/* Slide progress */}
+          <div className="flex items-center gap-4">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIdx(i)}
+                className="relative h-[2px] transition-all duration-700 cursor-pointer"
+                style={{
+                  width: i === idx ? 48 : 20,
+                  background: i === idx ? "#FF5733" : "rgba(255,255,255,0.15)",
+                }}
+              >
+                {i === idx && (
+                  <motion.div
+                    className="absolute inset-0"
+                    style={{ background: "#FF5733", transformOrigin: "left" }}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 5, ease: "linear" }}
+                    key={`progress-${idx}`}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
         </motion.div>
       </div>
 
-      {/* Scrolling marquee — promo ticker */}
+      {/* Side vertical text */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: ready ? 1 : 0 }}
-        transition={{ duration: 0.8, delay: 1 }}
-        className="absolute bottom-0 left-0 right-0 overflow-hidden bg-[#FF5733] py-2.5"
+        transition={{ duration: 1, delay: 1 }}
+        className="absolute right-6 md:right-10 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-6"
+      >
+        <div
+          className="text-white/15 font-sans uppercase tracking-[0.5em] writing-vertical"
+          style={{
+            fontSize: "9px",
+            writingMode: "vertical-rl",
+            textOrientation: "mixed",
+          }}
+        >
+          Dee & Abllo · Maison de Parfum · Almaty
+        </div>
+      </motion.div>
+
+      {/* Scrolling marquee */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: ready ? 1 : 0 }}
+        transition={{ duration: 0.8, delay: 1.2 }}
+        className="absolute bottom-0 left-0 right-0 overflow-hidden border-t border-white/[0.04] bg-black/40 backdrop-blur-sm py-2.5"
       >
         <motion.div
           animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
           className="flex whitespace-nowrap"
         >
-          {Array.from({ length: 8 }).map((_, i) => (
+          {Array.from({ length: 6 }).map((_, i) => (
             <span
               key={i}
-              className="font-sans uppercase tracking-[0.2em] text-white mx-8"
-              style={{ fontSize: "12px" }}
+              className="font-sans uppercase tracking-[0.3em] text-white/20 mx-10"
+              style={{ fontSize: "10px" }}
             >
-              Ручная сборка · Стойкость 12ч · Доставка по КЗ 1–3 дня · Бесплатный подбор аромата
+              <span className="text-[#FF5733]/40">◆</span>
+              {" "}Ручная сборка{" "}
+              <span className="text-[#FF5733]/40">◆</span>
+              {" "}Стойкость 12ч{" "}
+              <span className="text-[#FF5733]/40">◆</span>
+              {" "}Доставка по КЗ{" "}
+              <span className="text-[#FF5733]/40">◆</span>
+              {" "}Бесплатный подбор{" "}
             </span>
           ))}
         </motion.div>
