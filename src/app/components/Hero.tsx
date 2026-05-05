@@ -22,86 +22,82 @@ export function Hero() {
         className="absolute bottom-0 left-[-5%] right-[-5%] h-[30%] pointer-events-none opacity-40"
         style={{
           backgroundImage:
-            "radial-gradient(ellipse 120% 80% at 50% 100%, rgba(0,0,0,0.9), transparent), url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 200\"><path d=\"M0,100 Q200,50 400,100 T800,100 L800,200 L0,200Z\" fill=\"rgba(255,87,51,0.05)\"/></svg>')",
-          backgroundSize: "cover",
+            "radial-gradient(ellipse 120% 80% at 50% 100%, rgba(0,0,0,0.9), transparent)",
         }}
       />
 
       <div className="max-w-7xl mx-auto px-4 md:px-10 py-20 md:py-28 w-full relative z-10">
-        {/* Title */}
+        {/* Logo + Brand intro */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: D }}
-          className="text-center mb-6"
+          className="text-center mb-10"
         >
-          <div
-            className="text-[#FF5733] uppercase tracking-[0.5em] mb-4 font-sans"
-            style={{ fontSize: "13px" }}
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: D, ease: [0.22, 1, 0.36, 1] }}
+            className="flex justify-center mb-6"
           >
-            Парфюмерный Магазин
-          </div>
-          <h1
-            className="font-serif text-white leading-[0.95]"
-            style={{
-              fontSize: "clamp(3rem, 8vw, 6.5rem)",
-              fontWeight: 400,
-              fontStyle: "italic",
-            }}
+            <BrandLogo />
+          </motion.div>
+
+          {/* Mini description */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: D + 0.4 }}
+            className="text-white/40 font-sans max-w-lg mx-auto leading-relaxed mb-8"
+            style={{ fontSize: "14px" }}
           >
-            <motion.span
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 1,
-                delay: D + 0.1,
-                ease: [0.22, 1, 0.36, 1],
+            Независимый парфюмерный дом из Алматы. Мужские ароматы ручной сборки — чистые ноты, выверенные пропорции, стойкость до 12 часов.
+          </motion.p>
+
+          {/* Obsidian Collection title */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: D + 0.6 }}
+          >
+            <div
+              className="text-[#FF5733] uppercase tracking-[0.5em] mb-4 font-sans"
+              style={{ fontSize: "12px" }}
+            >
+              Новая коллекция
+            </div>
+            <h1
+              className="font-serif text-white leading-[0.95]"
+              style={{
+                fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+                fontWeight: 400,
+                fontStyle: "italic",
               }}
-              className="block"
             >
               Obsidian Collection
-            </motion.span>
-          </h1>
+            </h1>
+          </motion.div>
         </motion.div>
 
-        {/* Main hero grid */}
-        <div className="grid md:grid-cols-12 gap-6 items-center mt-12">
-          {/* Left panel — Sample info */}
+        {/* Main hero grid — bottle + side panels */}
+        <div className="grid md:grid-cols-12 gap-6 items-center mt-8">
+          {/* Left panel — Products chart */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, delay: D + 0.4 }}
-            className="md:col-span-3 space-y-4"
+            transition={{ duration: 0.9, delay: D + 0.8 }}
+            className="md:col-span-3"
           >
-            <div className="glass px-5 py-4 cursor-pointer group hover:glow-orange transition-all duration-500">
-              <div className="flex items-center justify-between">
-                <span className="text-white/80 uppercase tracking-[0.15em] font-sans" style={{ fontSize: "13px" }}>
-                  Название аромата
-                </span>
-                <span className="text-[#FF5733] group-hover:translate-x-1 transition-transform">&rsaquo;</span>
-              </div>
-            </div>
-            <div className="glass px-5 py-4 cursor-pointer group hover:glow-orange transition-all duration-500">
-              <div className="flex items-center justify-between">
-                <span className="text-white/80 uppercase tracking-[0.15em] font-sans" style={{ fontSize: "13px" }}>
-                  Пробный размер
-                </span>
-                <span className="text-[#FF5733] group-hover:translate-x-1 transition-transform">&rsaquo;</span>
-              </div>
-            </div>
-
-            {/* Products Chart */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: D + 0.7 }}
-              className="glass p-5"
-            >
-              <div className="text-white uppercase tracking-[0.2em] font-sans mb-4" style={{ fontSize: "12px", fontWeight: 600 }}>
+            <div className="glass p-5">
+              <div
+                className="text-white uppercase tracking-[0.2em] font-sans mb-4"
+                style={{ fontSize: "12px", fontWeight: 600 }}
+              >
                 Продукты
               </div>
               <NotesChart variant="warm" />
-            </motion.div>
+            </div>
           </motion.div>
 
           {/* Center — Hero bottle */}
@@ -110,13 +106,12 @@ export function Hero() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{
               duration: 1.4,
-              delay: D + 0.2,
+              delay: D + 0.3,
               ease: [0.22, 1, 0.36, 1],
             }}
             className="md:col-span-6 flex items-center justify-center relative"
           >
             <div className="relative">
-              {/* Bottle glow */}
               <div
                 className="absolute inset-0 pulse-glow rounded-full"
                 style={{
@@ -126,7 +121,6 @@ export function Hero() {
                   transform: "scale(1.5)",
                 }}
               />
-              {/* SVG Obsidian Bottle */}
               <ObsidianBottle />
             </div>
           </motion.div>
@@ -135,20 +129,29 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.9, delay: D + 0.4 }}
+            transition={{ duration: 0.9, delay: D + 0.8 }}
             className="md:col-span-3 space-y-4"
           >
             <div className="glass p-5">
-              <div className="text-white uppercase tracking-[0.2em] font-sans mb-3" style={{ fontSize: "12px", fontWeight: 600 }}>
+              <div
+                className="text-white uppercase tracking-[0.2em] font-sans mb-3"
+                style={{ fontSize: "12px", fontWeight: 600 }}
+              >
                 Описание
               </div>
-              <p className="text-white/50 font-sans leading-relaxed" style={{ fontSize: "13px" }}>
+              <p
+                className="text-white/50 font-sans leading-relaxed"
+                style={{ fontSize: "13px" }}
+              >
                 Ночная симфония пряностей и теней, созданная для тех, кто правит в темноте. Загадочный сплав специй и обсидиана.
               </p>
             </div>
 
             <div className="glass p-5">
-              <div className="text-white uppercase tracking-[0.2em] font-sans mb-4" style={{ fontSize: "12px", fontWeight: 600 }}>
+              <div
+                className="text-white uppercase tracking-[0.2em] font-sans mb-4"
+                style={{ fontSize: "12px", fontWeight: 600 }}
+              >
                 Ноты
               </div>
               <NotesChart variant="cool" />
@@ -158,7 +161,7 @@ export function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: D + 0.9 }}
+              transition={{ duration: 0.8, delay: D + 1.1 }}
               className="flex gap-3 justify-center"
             >
               {["30мл", "50мл", "100мл"].map((v, i) => (
@@ -195,6 +198,96 @@ export function Hero() {
   );
 }
 
+/* ── Brand Logo ── */
+function BrandLogo() {
+  return (
+    <svg
+      width="200"
+      height="200"
+      viewBox="0 0 200 200"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <radialGradient id="logoGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#FF5733" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#FF5733" stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="wreathGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="rgba(255,255,255,0.35)" />
+          <stop offset="50%" stopColor="rgba(255,87,51,0.4)" />
+          <stop offset="100%" stopColor="rgba(255,255,255,0.2)" />
+        </linearGradient>
+      </defs>
+
+      {/* Ambient glow */}
+      <circle cx="100" cy="100" r="90" fill="url(#logoGlow)" />
+
+      {/* Outer ring */}
+      <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
+      <circle cx="100" cy="100" r="75" fill="none" stroke="rgba(255,87,51,0.15)" strokeWidth="0.5" />
+
+      {/* Wreath — left */}
+      <path
+        d="M50,140 Q30,120 35,95 Q38,75 50,60 Q55,54 60,50"
+        fill="none"
+        stroke="url(#wreathGrad)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M55,135 Q38,118 42,97 Q44,80 55,68"
+        fill="none"
+        stroke="rgba(255,255,255,0.15)"
+        strokeWidth="1"
+      />
+      {/* Leaves left */}
+      <ellipse cx="40" cy="105" rx="6" ry="2.5" transform="rotate(-30 40 105)" fill="rgba(255,87,51,0.15)" />
+      <ellipse cx="45" cy="85" rx="5" ry="2" transform="rotate(-20 45 85)" fill="rgba(255,87,51,0.12)" />
+      <ellipse cx="52" cy="70" rx="5" ry="2" transform="rotate(-10 52 70)" fill="rgba(255,87,51,0.1)" />
+
+      {/* Wreath — right */}
+      <path
+        d="M150,140 Q170,120 165,95 Q162,75 150,60 Q145,54 140,50"
+        fill="none"
+        stroke="url(#wreathGrad)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M145,135 Q162,118 158,97 Q156,80 145,68"
+        fill="none"
+        stroke="rgba(255,255,255,0.15)"
+        strokeWidth="1"
+      />
+      {/* Leaves right */}
+      <ellipse cx="160" cy="105" rx="6" ry="2.5" transform="rotate(30 160 105)" fill="rgba(255,87,51,0.15)" />
+      <ellipse cx="155" cy="85" rx="5" ry="2" transform="rotate(20 155 85)" fill="rgba(255,87,51,0.12)" />
+      <ellipse cx="148" cy="70" rx="5" ry="2" transform="rotate(10 148 70)" fill="rgba(255,87,51,0.1)" />
+
+      {/* Brand text */}
+      <text x="100" y="92" textAnchor="middle" fill="white" fontFamily="'Cormorant Garamond', serif" fontSize="22" letterSpacing="5" fontWeight="400">
+        DEE
+      </text>
+      <text x="100" y="108" textAnchor="middle" fill="#FF5733" fontFamily="'Cormorant Garamond', serif" fontSize="18" fontStyle="italic">
+        &amp;
+      </text>
+      <text x="100" y="128" textAnchor="middle" fill="white" fontFamily="'Cormorant Garamond', serif" fontSize="22" letterSpacing="5" fontWeight="400">
+        ABLLO
+      </text>
+
+      {/* Tagline */}
+      <text x="100" y="152" textAnchor="middle" fill="rgba(255,255,255,0.3)" fontFamily="'Inter', sans-serif" fontSize="6.5" letterSpacing="3" textTransform="uppercase">
+        MAISON DE PARFUM
+      </text>
+
+      {/* Bottom decorative dot */}
+      <circle cx="100" cy="165" r="2" fill="rgba(255,87,51,0.3)" />
+    </svg>
+  );
+}
+
+/* ── Obsidian Bottle SVG ── */
 function ObsidianBottle() {
   return (
     <svg
