@@ -271,7 +271,7 @@ export function Hero() {
       <ObsidianOrb />
 
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-end pb-20 md:pb-28 px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto">
+      <div className="relative z-10 h-full flex flex-col justify-end pb-16 md:pb-28 px-5 md:px-16 lg:px-24 max-w-[1400px] mx-auto">
         {/* Subtitle badge */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -282,8 +282,8 @@ export function Hero() {
             transition={{ duration: 0.6 }}
           >
             <span
-              className="inline-block font-sans uppercase tracking-[0.4em] text-[#FF5733]/70 mb-5 border border-[#FF5733]/20 px-4 py-1.5"
-              style={{ fontSize: "10px", borderRadius: 2 }}
+              className="inline-block font-sans uppercase tracking-[0.3em] md:tracking-[0.4em] text-[#FF5733]/70 mb-3 md:mb-5 border border-[#FF5733]/20 px-3 md:px-4 py-1 md:py-1.5"
+              style={{ fontSize: "9px", borderRadius: 2 }}
             >
               {s.subtitle}
             </span>
@@ -298,9 +298,9 @@ export function Hero() {
             animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 40 }}
             exit={{ opacity: 0, y: -30 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-white leading-[1.0] mb-6 max-w-xl"
+            className="font-serif text-white leading-[1.05] mb-4 md:mb-6 max-w-xl"
             style={{
-              fontSize: "clamp(2.8rem, 6.5vw, 5rem)",
+              fontSize: "clamp(2rem, 6.5vw, 5rem)",
               fontWeight: 400,
             }}
           >
@@ -313,7 +313,7 @@ export function Hero() {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: ready ? 1 : 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="h-[2px] w-16 mb-6 origin-left"
+          className="h-[2px] w-12 md:w-16 mb-4 md:mb-6 origin-left"
           style={{ background: "#FF5733" }}
         />
 
@@ -325,8 +325,8 @@ export function Hero() {
             animate={{ opacity: ready ? 0.4 : 0, y: ready ? 0 : 20 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="text-white font-sans leading-relaxed mb-10 max-w-md"
-            style={{ fontSize: "14px" }}
+            className="text-white font-sans leading-relaxed mb-6 md:mb-10 max-w-md"
+            style={{ fontSize: "13px" }}
           >
             {s.desc}
           </motion.p>
@@ -337,12 +337,12 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: ready ? 1 : 0, y: ready ? 0 : 20 }}
           transition={{ duration: 0.7, delay: 0.3 }}
-          className="flex items-center gap-8"
+          className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8"
         >
           <a
             href="#catalog"
-            className="group flex items-center gap-3 mercury-btn mercury-btn-active font-sans uppercase tracking-[0.25em] transition-all duration-500"
-            style={{ fontSize: "11px", padding: "14px 32px", borderRadius: 50 }}
+            className="group flex items-center gap-2 md:gap-3 mercury-btn mercury-btn-active font-sans uppercase tracking-[0.15em] md:tracking-[0.25em] transition-all duration-500"
+            style={{ fontSize: "10px", padding: "12px 24px", borderRadius: 50 }}
           >
             Смотреть каталог
             <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -410,8 +410,8 @@ export function Hero() {
           {Array.from({ length: 6 }).map((_, i) => (
             <span
               key={i}
-              className="font-sans uppercase tracking-[0.3em] text-white/15 mx-10"
-              style={{ fontSize: "10px" }}
+              className="font-sans uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/15 mx-6 md:mx-10"
+              style={{ fontSize: "9px" }}
             >
               <span className="text-[#FF5733]/30">◆</span>
               {" "}Ручная сборка{" "}
