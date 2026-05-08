@@ -22,6 +22,7 @@ export function ProductGrid() {
       filtered = filtered.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
+          p.brand.toLowerCase().includes(q) ||
           p.type.toLowerCase().includes(q) ||
           p.desc.toLowerCase().includes(q)
       );
@@ -128,12 +129,12 @@ export function ProductGrid() {
                 />
                 {/* Orange glow overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#FF5733]/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                {p.old && (
+                {p.category === 1 && (
                   <div
                     className="absolute top-3 left-3 bg-[#FF5733] text-white px-3 py-1 uppercase tracking-[0.25em] font-sans rounded-full"
                     style={{ fontSize: "9px" }}
                   >
-                    Sale
+                    Premium
                   </div>
                 )}
                 {/* Price reveal on hover */}
@@ -141,7 +142,7 @@ export function ProductGrid() {
                   className="absolute bottom-3 left-3 right-3 text-center py-2.5 glass uppercase tracking-[0.25em] font-sans opacity-0 group-hover:opacity-100 transition-all duration-500"
                   style={{ fontSize: "10px", color: "rgba(220,220,220,0.9)" }}
                 >
-                  {p.price.toLocaleString()} ₸
+                  от {p.volumes[0].price.toLocaleString()} ₸
                 </div>
               </div>
               <div className="text-center">
@@ -157,8 +158,11 @@ export function ProductGrid() {
                 >
                   {p.name}
                 </div>
+                <div className="text-white/30 font-sans mb-0.5" style={{ fontSize: "11px" }}>
+                  {p.brand}
+                </div>
                 <div className="text-white/40 font-sans" style={{ fontSize: "13px" }}>
-                  {p.price.toLocaleString()} ₸
+                  от {p.volumes[0].price.toLocaleString()} ₸
                 </div>
               </div>
             </motion.button>

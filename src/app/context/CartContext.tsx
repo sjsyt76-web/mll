@@ -5,13 +5,14 @@ export type CartItem = {
   product: Product;
   qty: number;
   volume: string;
+  unitPrice: number;
 };
 
 type CartCtx = {
   items: CartItem[];
   open: boolean;
   setOpen: (v: boolean) => void;
-  add: (product: Product, volume?: string) => void;
+  add: (product: Product, volume: string, unitPrice: number) => void;
   remove: (productId: number, volume: string) => void;
   updateQty: (productId: number, volume: string, qty: number) => void;
   total: number;
@@ -24,7 +25,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [open, setOpen] = useState(false);
 
-  const add = useCallback((product: Product, volume = "50мл") => {
+  const add = useCallback((product: Product, volume: string, unitPrice: number) => {
     setItems((prev) => {
       const existing = prev.find(
         (i) => i.product.id === product.id && i.volume === volume
@@ -36,7 +37,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             : i
         );
       }
-      return [...prev, { product, qty: 1, volume }];
+      return [...prev, { product, qty: 1, volume, unitPrice }];
     });
     setOpen(true);
   }, []);
@@ -64,7 +65,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [remove]
   );
 
-  const total = items.reduce((sum, i) => sum + i.product.price * i.qty, 0);
+  const total = items.reduce((sum, i) => sum + i.unitPrice * i.qty, 0);
   const count = items.reduce((sum, i) => sum + i.qty, 0);
 
   return (

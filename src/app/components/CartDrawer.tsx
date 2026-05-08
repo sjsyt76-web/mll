@@ -114,7 +114,7 @@ function CartStep({
   onCheckout,
   onClose,
 }: {
-  items: { product: { id: number; name: string; type: string; price: number; img: string }; qty: number; volume: string }[];
+  items: { product: { id: number; name: string; brand: string; type: string; img: string }; qty: number; volume: string; unitPrice: number }[];
   remove: (id: number, vol: string) => void;
   updateQty: (id: number, vol: string, q: number) => void;
   total: number;
@@ -413,7 +413,7 @@ function CartItemRow({
   onRemove,
   onQty,
 }: {
-  item: { product: { id: number; name: string; type: string; price: number; img: string }; qty: number; volume: string };
+  item: { product: { id: number; name: string; brand: string; type: string; img: string }; qty: number; volume: string; unitPrice: number };
   onRemove: () => void;
   onQty: (q: number) => void;
 }) {
@@ -441,6 +441,9 @@ function CartItemRow({
           </div>
           <div className="font-serif text-white mb-1" style={{ fontSize: "16px", fontWeight: 400, lineHeight: 1.3 }}>
             {item.product.name}
+          </div>
+          <div className="font-sans text-white/25 mb-0.5" style={{ fontSize: "10px" }}>
+            {item.product.brand}
           </div>
           <div className="font-sans text-white/35" style={{ fontSize: "11px" }}>
             {item.volume}
@@ -479,7 +482,7 @@ function CartItemRow({
 
           <div className="flex items-center gap-3">
             <span className="font-sans text-white" style={{ fontSize: "14px" }}>
-              {(item.product.price * item.qty).toLocaleString()} ₸
+              {(item.unitPrice * item.qty).toLocaleString()} ₸
             </span>
             <button onClick={onRemove} className="text-white/25 hover:text-red-400/70 transition-colors">
               <Trash2 size={14} strokeWidth={1.5} />

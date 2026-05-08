@@ -12,8 +12,10 @@ export function ProductModal({
   product: Product | null;
   onClose: () => void;
 }) {
-  const [vol, setVol] = useState("30мл");
+  const [volIdx, setVolIdx] = useState(0);
   const cart = useCart();
+
+  const selectedVol = product ? product.volumes[volIdx] : null;
 
   return (
     <AnimatePresence>
@@ -42,7 +44,6 @@ export function ProductModal({
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-              {/* Inner glow */}
               <div
                 className="absolute inset-0 pointer-events-none pulse-glow"
                 style={{
@@ -62,10 +63,17 @@ export function ProductModal({
               </button>
 
               <div
-                className="text-[#FF5733]/60 uppercase tracking-[0.3em] mb-3"
+                className="text-[#FF5733]/60 uppercase tracking-[0.3em] mb-1"
                 style={{ fontSize: "10px" }}
               >
-                {product.type} · №{product.id.toString().padStart(2, "0")}
+                {product.type} · {product.category === 1 ? "Premium" : "Classic"}
+              </div>
+
+              <div
+                className="text-white/30 uppercase tracking-[0.2em] mb-3 font-sans"
+                style={{ fontSize: "11px" }}
+              >
+                {product.brand}
               </div>
 
               <h3
@@ -79,7 +87,7 @@ export function ProductModal({
                 className="font-serif italic text-white/40 mb-6"
                 style={{ fontSize: "15px" }}
               >
-                Eau de Parfum · Extrait
+                Масло · Eau de Parfum
               </div>
 
               <p
@@ -89,7 +97,7 @@ export function ProductModal({
                 {product.desc}
               </p>
 
-              {/* Notes pyramid as glass tubes */}
+              {/* Notes pyramid */}
               <div className="mb-8">
                 <div
                   className="text-white/40 uppercase tracking-[0.3em] mb-4"
@@ -98,47 +106,48 @@ export function ProductModal({
                   Пирамида аромата
                 </div>
                 <div className="space-y-3">
-                  {product.notes.map((n, i) => {
-                    const labels = ["Верхние", "Средние", "Базовые"];
-                    const widths = ["100%", "75%", "50%"];
-                    const opacities = [0.8, 0.5, 0.3];
-                    return (
-                      <div key={n} className="flex items-center gap-3">
-                        <span
-                          className="text-white/30 w-16 shrink-0"
-                          style={{ fontSize: "11px" }}
-                        >
-                          {labels[i] || "Ноты"}
-                        </span>
-                        <div className="flex-1 h-2 rounded-full overflow-hidden bg-white/5">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: widths[i] }}
-                            transition={{
-                              duration: 1,
-                              delay: i * 0.2,
-                              ease: [0.22, 1, 0.36, 1],
-                            }}
-                            className="h-full rounded-full"
-                            style={{
-                              background: `rgba(255,87,51,${opacities[i]})`,
-                              boxShadow: `0 0 12px rgba(255,87,51,${opacities[i] * 0.5})`,
-                            }}
-                          />
-                        </div>
-                        <span
-                          className="font-serif italic text-white shrink-0"
-                          style={{ fontSize: "14px" }}
-                        >
-                          {n}
-                        </span>
+                  {(
+                    [
+                      { label: "Верхние", items: product.notes.top, width: "100%", opacity: 0.8 },
+                      { label: "Сердце", items: product.notes.heart, width: "75%", opacity: 0.5 },
+                      { label: "Базовые", items: product.notes.base, width: "50%", opacity: 0.3 },
+                    ] as const
+                  ).map((row, i) => (
+                    <div key={row.label} className="flex items-center gap-3">
+                      <span
+                        className="text-white/30 w-16 shrink-0"
+                        style={{ fontSize: "11px" }}
+                      >
+                        {row.label}
+                      </span>
+                      <div className="flex-1 h-2 rounded-full overflow-hidden bg-white/5">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: row.width }}
+                          transition={{
+                            duration: 1,
+                            delay: i * 0.2,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
+                          className="h-full rounded-full"
+                          style={{
+                            background: `rgba(255,87,51,${row.opacity})`,
+                            boxShadow: `0 0 12px rgba(255,87,51,${row.opacity * 0.5})`,
+                          }}
+                        />
                       </div>
-                    );
-                  })}
+                      <span
+                        className="font-serif italic text-white shrink-0 max-w-[140px] text-right"
+                        style={{ fontSize: "13px" }}
+                      >
+                        {row.items.slice(0, 3).join(", ")}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              {/* Volume selector - mercury drops */}
+              {/* Volume selector */}
               <div className="mb-8">
                 <div
                   className="text-white/40 uppercase tracking-[0.3em] mb-3"
@@ -146,17 +155,17 @@ export function ProductModal({
                 >
                   Объём
                 </div>
-                <div className="flex gap-3">
-                  {["10мл", "30мл", "50мл"].map((v) => (
+                <div className="flex flex-wrap gap-2">
+                  {product.volumes.map((v, idx) => (
                     <button
-                      key={v}
-                      onClick={() => setVol(v)}
+                      key={v.label}
+                      onClick={() => setVolIdx(idx)}
                       className={`mercury-btn font-sans ${
-                        vol === v ? "mercury-btn-active" : ""
+                        volIdx === idx ? "mercury-btn-active" : ""
                       }`}
-                      style={{ fontSize: "12px" }}
+                      style={{ fontSize: "11px", padding: "6px 12px" }}
                     >
-                      {v}
+                      {v.label}
                     </button>
                   ))}
                 </div>
@@ -168,20 +177,18 @@ export function ProductModal({
                   className="font-serif text-white"
                   style={{ fontSize: "1.75rem" }}
                 >
-                  {product.price.toLocaleString()} ₸
+                  {selectedVol?.price.toLocaleString()} ₸
                 </span>
-                {product.old && (
-                  <span className="text-white/30 line-through">
-                    {product.old.toLocaleString()} ₸
-                  </span>
-                )}
+                <span className="text-white/30 font-sans" style={{ fontSize: "12px" }}>
+                  {selectedVol?.label}
+                </span>
               </div>
 
               {/* Add to cart */}
               <button
                 onClick={() => {
-                  if (product) {
-                    cart.add(product, vol);
+                  if (product && selectedVol) {
+                    cart.add(product, selectedVol.label, selectedVol.price);
                     onClose();
                   }
                 }}

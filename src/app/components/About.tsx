@@ -68,7 +68,7 @@ export function About() {
           <div className="grid grid-cols-3 gap-6 border-t border-white/10 mt-10 pt-8">
             {[
               ["2021", "основан"],
-              ["32", "аромата"],
+              ["17", "ароматов"],
               ["3 500+", "клиентов"],
             ].map(([n, l]) => (
               <div key={l}>
