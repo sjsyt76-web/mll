@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import type { Product } from "../data/products";
+import { useCart } from "../context/CartContext";
 
 export function ProductModal({
   product,
@@ -12,6 +13,7 @@ export function ProductModal({
   onClose: () => void;
 }) {
   const [vol, setVol] = useState("30мл");
+  const cart = useCart();
 
   return (
     <AnimatePresence>
@@ -177,6 +179,12 @@ export function ProductModal({
 
               {/* Add to cart */}
               <button
+                onClick={() => {
+                  if (product) {
+                    cart.add(product, vol);
+                    onClose();
+                  }
+                }}
                 className="w-full py-4 uppercase tracking-[0.3em] flex items-center justify-center gap-2 font-sans transition-all duration-500 mercury-btn mercury-btn-active"
                 style={{ fontSize: "11px", borderRadius: 14 }}
               >

@@ -1,10 +1,12 @@
 import { Search, ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion } from "motion/react";
+import { useCart } from "../context/CartContext";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const links = ["Каталог", "О нас", "Контакты"];
+  const cart = useCart();
 
   return (
     <motion.header
@@ -51,14 +53,19 @@ export function Header() {
               <button className="hover:text-[#FF5733] transition-colors">
                 <Search size={18} />
               </button>
-              <button className="hover:text-[#FF5733] transition-colors relative">
+              <button
+                onClick={() => cart.setOpen(true)}
+                className="hover:text-[#FF5733] transition-colors relative"
+              >
                 <ShoppingBag size={18} />
-                <span
-                  className="absolute -top-1.5 -right-1.5 bg-[#FF5733] text-white rounded-full w-4 h-4 flex items-center justify-center font-sans"
-                  style={{ fontSize: "9px" }}
-                >
-                  0
-                </span>
+                {cart.count > 0 && (
+                  <span
+                    className="absolute -top-1.5 -right-1.5 bg-[#FF5733] text-white rounded-full w-4 h-4 flex items-center justify-center font-sans"
+                    style={{ fontSize: "9px" }}
+                  >
+                    {cart.count}
+                  </span>
+                )}
               </button>
             </div>
           </div>
