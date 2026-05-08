@@ -1,62 +1,270 @@
+export type VolumeOption = {
+  label: string;
+  price: number;
+};
+
 export type Product = {
   id: number;
   name: string;
+  brand: string;
   type: string;
-  notes: string[];
-  price: number;
-  old?: number;
+  category: 1 | 2;
+  notes: { top: string[]; heart: string[]; base: string[] };
+  volumes: VolumeOption[];
   img: string;
   desc: string;
 };
 
-const IMGS = [
-  "https://images.unsplash.com/photo-1772191399367-91ed8d95664b?w=900",
-  "https://images.unsplash.com/photo-1774682060992-4ae4fb77e73f?w=900",
-  "https://images.unsplash.com/photo-1774682060997-f8959850a7d4?w=900",
-  "https://images.unsplash.com/photo-1759794108525-94ff060da692?w=900",
-  "https://images.unsplash.com/photo-1774682061055-3bfe402e5a12?w=900",
-  "https://images.unsplash.com/photo-1758871992965-836e1fb0f9bc?w=900",
-  "https://images.unsplash.com/photo-1554948419-1939083b12cf?w=900",
-  "https://images.unsplash.com/photo-1709294993903-f6d8ef544e55?w=900",
+const CAT1_VOLUMES: VolumeOption[] = [
+  { label: "3мл (масло)", price: 6000 },
+  { label: "6мл (масло)", price: 12000 },
+  { label: "5мл (парфюм)", price: 6000 },
+  { label: "10мл (парфюм)", price: 10000 },
+  { label: "20мл (парфюм)", price: 18000 },
+  { label: "30мл (парфюм)", price: 27000 },
+  { label: "50мл (парфюм)", price: 39000 },
 ];
 
-const raw: Omit<Product, "id" | "img">[] = [
-  { name: "Noir Ambré", type: "Восточный", notes: ["Амбра", "Ладан", "Ваниль"], price: 14900, old: 18900, desc: "Тёмный амбровый аккорд с ладаном и тёплой ванилью." },
-  { name: "Tabac Doré", type: "Табачный", notes: ["Табак", "Ваниль", "Кожа"], price: 13400, desc: "Сладкий табак, обожжённая ваниль и нотка выдержанной кожи." },
-  { name: "Oud Inferno", type: "Древесный", notes: ["Уд", "Кожа", "Шафран"], price: 19900, old: 23000, desc: "Густой уд с дымной кожей и пряным шафраном." },
-  { name: "Citrus Noir", type: "Цитрусовый", notes: ["Бергамот", "Дым", "Кедр"], price: 11900, desc: "Холодный бергамот, дымный кедр, графитовая чистота." },
-  { name: "Amber Luxe", type: "Амбровый", notes: ["Амбра", "Мускус", "Бензоин"], price: 14200, desc: "Тёплый янтарный шлейф для холодных вечеров." },
-  { name: "Vetiver Steel", type: "Свежий", notes: ["Ветивер", "Грейпфрут", "Перец"], price: 12800, desc: "Серый ветивер с перцем — деловой и чистый." },
-  { name: "Smoke Cedar", type: "Древесный", notes: ["Кедр", "Дым", "Иней"], price: 13200, desc: "Холодный кедр и сухой дым." },
-  { name: "Black Leather 09", type: "Кожаный", notes: ["Кожа", "Берёзовый дёготь", "Мускус"], price: 16400, desc: "Брутальный кожаный аккорд с берёзовым дёгтем." },
-  { name: "Iron Musk", type: "Мускусный", notes: ["Белый мускус", "Металл", "Лаванда"], price: 12100, desc: "Чистый металлический мускус, как стальной утренний воздух." },
-  { name: "Whiskey Blonde", type: "Гурманский", notes: ["Виски", "Мёд", "Сандал"], price: 15200, desc: "Бочковой виски, мёд и сухой сандал." },
-  { name: "Graphite", type: "Минеральный", notes: ["Графит", "Перец", "Ирис"], price: 13900, desc: "Сухая минеральность, как затёртый карандаш." },
-  { name: "Storm 47", type: "Озоновый", notes: ["Озон", "Соль", "Полынь"], price: 11500, desc: "Запах грозы над морем." },
-  { name: "Black Vanilla", type: "Гурманский", notes: ["Ваниль", "Кофе", "Какао"], price: 14600, desc: "Тёмная ваниль с горьким эспрессо." },
-  { name: "Pepper & Iron", type: "Пряный", notes: ["Чёрный перец", "Железо", "Кедр"], price: 12700, desc: "Острый чёрный перец и металл." },
-  { name: "Saffron Royal", type: "Пряный", notes: ["Шафран", "Роза", "Уд"], price: 16800, desc: "Восточный шафран на удовой подложке." },
-  { name: "Cuir 12", type: "Кожаный", notes: ["Замша", "Ирис", "Бобы тонка"], price: 14800, desc: "Мягкая замша и тёплая тонка." },
-  { name: "Midnight Oak", type: "Древесный", notes: ["Дуб", "Виски", "Мох"], price: 15500, desc: "Старый дуб и мшистая дорожка." },
-  { name: "Black Coffee", type: "Гурманский", notes: ["Кофе", "Какао", "Ваниль"], price: 13100, desc: "Запах свежесваренного эспрессо." },
-  { name: "Steel Vetiver", type: "Свежий", notes: ["Ветивер", "Лимон", "Мята"], price: 11800, desc: "Холодный лимон по графиту." },
-  { name: "Ash & Salt", type: "Минеральный", notes: ["Пепел", "Соль", "Можжевельник"], price: 13700, desc: "Холодный пепел после костра у моря." },
-  { name: "Black Fig", type: "Фруктовый", notes: ["Инжир", "Кедр", "Молоко"], price: 12900, desc: "Зелёный инжир и сливочный кедр." },
-  { name: "Dark Suede", type: "Кожаный", notes: ["Замша", "Ваниль", "Перец"], price: 15900, desc: "Бархатная замша с тёплой ванилью." },
-  { name: "Frost Iris", type: "Пудровый", notes: ["Ирис", "Фиалка", "Мускус"], price: 14400, desc: "Холодный ирис в минималистичной оправе." },
-  { name: "Tobacco Hour", type: "Табачный", notes: ["Табак", "Ром", "Корица"], price: 14000, desc: "Тёплая трубка и стакан рома." },
-  { name: "Obsidian", type: "Минеральный", notes: ["Камень", "Лаванда", "Уд"], price: 17200, desc: "Чёрный обсидиан и сухая лаванда." },
-  { name: "Cardamom Black", type: "Пряный", notes: ["Кардамон", "Кофе", "Ладан"], price: 12600, desc: "Зелёный кардамон с горьким кофе." },
-  { name: "Patchouli 03", type: "Землистый", notes: ["Пачули", "Какао", "Кедр"], price: 13800, desc: "Минималистичный пачули и тёмное какао." },
-  { name: "White Smoke", type: "Дымный", notes: ["Берёза", "Соль", "Мускус"], price: 12300, desc: "Лёгкий белый дым на коже." },
-  { name: "Concrete", type: "Минеральный", notes: ["Бетон", "Перец", "Ирис"], price: 14100, desc: "Сухой бетон после дождя." },
-  { name: "Black Tea Noir", type: "Чайный", notes: ["Чёрный чай", "Бергамот", "Мёд"], price: 11600, desc: "Крепкий чёрный чай с бергамотом." },
-  { name: "Iron Wood", type: "Древесный", notes: ["Железное дерево", "Дым", "Перец"], price: 15300, desc: "Плотное дерево и металл." },
-  { name: "Velvet Night", type: "Восточный", notes: ["Амбра", "Уд", "Шоколад"], price: 16100, desc: "Густая бархатная ночь." },
+const CAT2_VOLUMES: VolumeOption[] = [
+  { label: "3мл (масло)", price: 4500 },
+  { label: "6мл (масло)", price: 8000 },
+  { label: "5мл (парфюм)", price: 5500 },
+  { label: "10мл (парфюм)", price: 8500 },
+  { label: "20мл (парфюм)", price: 15000 },
+  { label: "30мл (парфюм)", price: 21000 },
+  { label: "50мл (парфюм)", price: 35000 },
+];
+
+type RawProduct = Omit<Product, "id" | "volumes"> & { category: 1 | 2 };
+
+const raw: RawProduct[] = [
+  // ── Категория 1 ──
+  {
+    name: "Tygar Le Gemme",
+    brand: "Bvlgari",
+    type: "Цитрусовый",
+    category: 1,
+    notes: {
+      top: ["Грейпфрут"],
+      heart: ["Имбирь", "Амбретта"],
+      base: ["Амброксан", "Мускус", "Пачули", "Ветивер"],
+    },
+    img: "https://images.unsplash.com/photo-1772191399367-91ed8d95664b?w=900",
+    desc: "Контрастный цитрусово-древесный аккорд: сияющий грейпфрут встречает глубокую амбру.",
+  },
+  {
+    name: "Afternoon Swim",
+    brand: "Louis Vuitton",
+    type: "Цитрусовый",
+    category: 1,
+    notes: {
+      top: ["Мандарин", "Сицилийский апельсин", "Бергамот"],
+      heart: ["Имбирь"],
+      base: ["Амбра"],
+    },
+    img: "https://images.unsplash.com/photo-1774682060992-4ae4fb77e73f?w=900",
+    desc: "Энергичный всплеск цитрусов — солнечное послеполуденное купание в аромате.",
+  },
+  {
+    name: "Imagination",
+    brand: "Louis Vuitton",
+    type: "Цитрусовый",
+    category: 1,
+    notes: {
+      top: ["Бергамот", "Сицилийский апельсин", "Цитрон"],
+      heart: ["Нероли", "Имбирь", "Корица"],
+      base: ["Амброксан", "Чёрный чай", "Ладан", "Гваяковое дерево"],
+    },
+    img: "https://images.unsplash.com/photo-1774682060997-f8959850a7d4?w=900",
+    desc: "Щедрый амброксан и китайский чай — воображение, обращённое в аромат.",
+  },
+  {
+    name: "L'Immensité",
+    brand: "Louis Vuitton",
+    type: "Свежий",
+    category: 1,
+    notes: {
+      top: ["Грейпфрут", "Имбирь", "Бергамот"],
+      heart: ["Водные ноты", "Розмарин", "Шалфей", "Герань"],
+      base: ["Амброксан", "Амбра", "Лабданум"],
+    },
+    img: "https://images.unsplash.com/photo-1759794108525-94ff060da692?w=900",
+    desc: "Бескрайний горизонт: свежий грейпфрут и имбирь над тёплой амброй.",
+  },
+  {
+    name: "Aventus",
+    brand: "Creed",
+    type: "Древесный",
+    category: 1,
+    notes: {
+      top: ["Лимон", "Розовый перец", "Яблоко", "Бергамот", "Чёрная смородина"],
+      heart: ["Ананас", "Жасмин", "Пачули"],
+      base: ["Берёза", "Амброксан", "Кедр", "Дубовый мох", "Мускус"],
+    },
+    img: "https://images.unsplash.com/photo-1774682061055-3bfe402e5a12?w=900",
+    desc: "Культовый аромат силы и успеха: ананас, берёза и дымный кедр.",
+  },
+  {
+    name: "Interlude Man",
+    brand: "Amouage",
+    type: "Восточный",
+    category: 1,
+    notes: {
+      top: ["Бергамот", "Орегано", "Перец пименто"],
+      heart: ["Амбра", "Ладан", "Цистус", "Опопонакс"],
+      base: ["Кожа", "Уд", "Пачули", "Сандал"],
+    },
+    img: "https://images.unsplash.com/photo-1758871992965-836e1fb0f9bc?w=900",
+    desc: "Хаос и гармония: дымный ладан, жжёная кожа и удовое дерево.",
+  },
+  {
+    name: "Black Afgano",
+    brand: "Nasomatto",
+    type: "Восточный",
+    category: 1,
+    notes: {
+      top: ["Зелёные ноты", "Шафран", "Тимьян"],
+      heart: ["Смолы", "Табак", "Кофе", "Корица"],
+      base: ["Уд", "Ладан", "Амбра", "Мускус", "Бобы тонка"],
+    },
+    img: "https://images.unsplash.com/photo-1554948419-1939083b12cf?w=900",
+    desc: "Тёмный, смолистый и гипнотический — наркотическая глубина уда и дыма.",
+  },
+  {
+    name: "The Hedonist",
+    brand: "Ex Nihilo",
+    type: "Древесный",
+    category: 1,
+    notes: {
+      top: ["Имбирь", "Бергамот"],
+      heart: ["Акигаловуд", "Кедр"],
+      base: ["Ветивер", "Мускус", "Бобы тонка"],
+    },
+    img: "https://images.unsplash.com/photo-1709294993903-f6d8ef544e55?w=900",
+    desc: "Путешествие без конечного пункта: кедр и ветивер — первозданная сила земли.",
+  },
+  {
+    name: "Megamare",
+    brand: "Orto Parisi",
+    type: "Свежий",
+    category: 1,
+    notes: {
+      top: ["Бергамот", "Лимон"],
+      heart: ["Морские водоросли", "Калон", "Гедион"],
+      base: ["Мускус", "Амброксан", "Кедр"],
+    },
+    img: "https://images.unsplash.com/photo-1769625310883-6c87ed402d6f?w=900",
+    desc: "Бесконечное дыхание океана: солёная сила моря в концентрированной форме.",
+  },
+  // ── Категория 2 ──
+  {
+    name: "Madawi Gold",
+    brand: "Arabian Oud",
+    type: "Восточный",
+    category: 2,
+    notes: {
+      top: ["Кардамон", "Фруктовые ноты"],
+      heart: ["Ананас", "Жасмин", "Бобы тонка"],
+      base: ["Ваниль", "Пачули"],
+    },
+    img: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=900",
+    desc: "Гурманский восточный шедевр: кардамон, тонка и бархатная ваниль.",
+  },
+  {
+    name: "Ombré Leather",
+    brand: "Tom Ford",
+    type: "Кожаный",
+    category: 2,
+    notes: {
+      top: ["Кардамон"],
+      heart: ["Жасмин самбак", "Чёрная кожа"],
+      base: ["Пачули", "Белый мох", "Амбра"],
+    },
+    img: "https://images.unsplash.com/photo-1594035910387-fea081ae7215?w=900",
+    desc: "Сердце американского запада: богатая чёрная кожа с дикой красотой жасмина.",
+  },
+  {
+    name: "Tobacco Vanille",
+    brand: "Tom Ford",
+    type: "Табачный",
+    category: 2,
+    notes: {
+      top: ["Табачный лист", "Специи"],
+      heart: ["Бобы тонка", "Табачный цвет", "Ваниль", "Какао"],
+      base: ["Сухофрукты", "Древесные ноты"],
+    },
+    img: "https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=900",
+    desc: "Тёплая иконическая смесь табака, ванили и сладкого древесного сока.",
+  },
+  {
+    name: "Ganymede",
+    brand: "Marc-Antoine Barrois",
+    type: "Кожаный",
+    category: 2,
+    notes: {
+      top: ["Мандарин", "Шафран"],
+      heart: ["Фиалка", "Китайский османтус"],
+      base: ["Акигаловуд", "Бессмертник"],
+    },
+    img: "https://images.unsplash.com/photo-1595425964272-fc617fa19dfa?w=900",
+    desc: "Минеральная элегантность: фиалка и замша на орбите спутника Юпитера.",
+  },
+  {
+    name: "Kirke",
+    brand: "Tiziana Terenzi",
+    type: "Фруктовый",
+    category: 2,
+    notes: {
+      top: ["Маракуйя", "Персик", "Малина", "Смородина", "Груша"],
+      heart: ["Ландыш"],
+      base: ["Гелиотроп", "Сандал", "Ваниль", "Пачули", "Мускус"],
+    },
+    img: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=900",
+    desc: "Пьянящий фруктовый коктейль: маракуйя и персик на бархатном сандале.",
+  },
+  {
+    name: "Angels' Share",
+    brand: "Kilian",
+    type: "Восточный",
+    category: 2,
+    notes: {
+      top: ["Коньяк"],
+      heart: ["Дуб", "Корица"],
+      base: ["Бобы тонка", "Сандал", "Ваниль", "Пралине"],
+    },
+    img: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=900",
+    desc: "Доля ангелов: выдержанный коньяк, дубовая бочка и бархатная ваниль.",
+  },
+  {
+    name: "Le Beau",
+    brand: "Jean Paul Gaultier",
+    type: "Свежий",
+    category: 2,
+    notes: {
+      top: ["Бергамот", "Ананас"],
+      heart: ["Кокос", "Кипарис", "Ирис"],
+      base: ["Кедр", "Сандал", "Бобы тонка"],
+    },
+    img: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=900",
+    desc: "Тропическая свежесть: ананас и кокос на базе тёплого сандала.",
+  },
+  {
+    name: "Arabians Tonka",
+    brand: "Montale",
+    type: "Восточный",
+    category: 2,
+    notes: {
+      top: ["Бергамот", "Шафран"],
+      heart: ["Роза", "Уд", "Кожа"],
+      base: ["Амбра", "Дубовый мох", "Бобы тонка", "Коричневый сахар", "Белый мускус"],
+    },
+    img: "https://images.unsplash.com/photo-1610461888750-10bfc601b874?w=900",
+    desc: "Бестселлер Montale: обволакивающий уд, роза и тонка в восточном шлейфе.",
+  },
 ];
 
 export const products: Product[] = raw.map((p, i) => ({
   ...p,
   id: i + 1,
-  img: IMGS[i % IMGS.length],
+  volumes: p.category === 1 ? CAT1_VOLUMES : CAT2_VOLUMES,
 }));
