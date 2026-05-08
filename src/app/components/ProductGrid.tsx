@@ -1,18 +1,33 @@
 import { useState, useMemo } from "react";
 import { motion } from "motion/react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "./ImageWithFallback";
 import { ProductModal } from "./ProductModal";
 import { products, type Product } from "../data/products";
+import { useSearch } from "../context/SearchContext";
 
 export function ProductGrid() {
   const [selected, setSelected] = useState<Product | null>(null);
   const [filter, setFilter] = useState("Все");
+  const { query } = useSearch();
 
   const types = useMemo(
     () => ["Все", ...Array.from(new Set(products.map((p) => p.type)))],
     []
   );
-  const list = filter === "Все" ? products : products.filter((p) => p.type === filter);
+
+  const list = useMemo(() => {
+    let filtered = filter === "Все" ? products : products.filter((p) => p.type === filter);
+    if (query.trim()) {
+      const q = query.toLowerCase().trim();
+      filtered = filtered.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.type.toLowerCase().includes(q) ||
+          p.desc.toLowerCase().includes(q)
+      );
+    }
+    return filtered;
+  }, [filter, query]);
 
   return (
     <section id="catalog" className="bg-black py-24 px-4 md:px-10 relative">
@@ -83,6 +98,16 @@ export function ProductGrid() {
           layout
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"
         >
+          {list.length === 0 && (
+            <div className="col-span-full text-center py-16">
+              <p className="font-serif text-white/30" style={{ fontSize: "18px" }}>
+                Ничего не найдено
+              </p>
+              <p className="font-sans text-white/20 mt-2" style={{ fontSize: "12px" }}>
+                Попробуйте другой запрос
+              </p>
+            </div>
+          )}
           {list.map((p, i) => (
             <motion.button
               key={p.id}

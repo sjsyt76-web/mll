@@ -10,8 +10,8 @@ export function Footer() {
             "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(255,87,51,0.03), transparent)",
         }}
       />
-      <div className="max-w-7xl mx-auto px-4 md:px-10 py-16 grid md:grid-cols-4 gap-10 relative">
-        <div className="md:col-span-1">
+      <div className="max-w-7xl mx-auto px-4 md:px-10 py-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10 relative">
+        <div className="col-span-2 md:col-span-1">
           <div
             className="font-serif text-white tracking-[0.2em] uppercase mb-4"
             style={{ fontSize: "22px" }}

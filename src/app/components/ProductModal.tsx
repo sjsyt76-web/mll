@@ -1,7 +1,7 @@
 import { X, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "./ImageWithFallback";
 import type { Product } from "../data/products";
 import { useCart } from "../context/CartContext";
 
@@ -35,7 +35,7 @@ export function ProductModal({
             style={{ borderRadius: 24 }}
           >
             {/* Image */}
-            <div className="relative aspect-square overflow-hidden" style={{ borderRadius: "24px 0 0 24px" }}>
+            <div className="relative aspect-[4/3] md:aspect-square overflow-hidden rounded-t-[24px] md:rounded-t-none md:rounded-l-[24px]">
               <ImageWithFallback
                 src={product.img}
                 alt={product.name}

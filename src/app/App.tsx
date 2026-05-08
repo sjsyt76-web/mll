@@ -1,4 +1,5 @@
 import { CartProvider } from "./context/CartContext";
+import { SearchProvider } from "./context/SearchContext";
 import { Intro } from "./components/Intro";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
@@ -12,19 +13,21 @@ import { CartDrawer } from "./components/CartDrawer";
 
 export default function App() {
   return (
-    <CartProvider>
-      <div className="min-h-screen bg-black text-white font-sans relative overflow-x-hidden">
-        <BackgroundEffects />
-        <Intro />
-        <Header />
-        <Hero />
-        <Features />
-        <ProductGrid />
-        <Bottles />
-        <About />
-        <Footer />
-        <CartDrawer />
-      </div>
-    </CartProvider>
+    <SearchProvider>
+      <CartProvider>
+        <div className="min-h-screen bg-black text-white font-sans relative overflow-x-hidden">
+          <BackgroundEffects />
+          <Intro />
+          <Header />
+          <Hero />
+          <Features />
+          <ProductGrid />
+          <Bottles />
+          <About />
+          <Footer />
+          <CartDrawer />
+        </div>
+      </CartProvider>
+    </SearchProvider>
   );
 }
